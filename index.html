@@ -67,19 +67,23 @@
 
     let platforms = [];
     const gravity = 0.5;
-    const platformCount = 8;
+    const platformCount = 6;
     let score = 0;
 
     function initPlatforms() {
       let spacing = 600 / platformCount;
+      let lastX = Math.random() * 330;
       for (let i = 0; i < platformCount; i++) {
+        let nextX = lastX + (Math.random() * 80 - 40); // 控制在 ±40px 内
+        nextX = Math.max(0, Math.min(nextX, 330)); // 保证在画布范围内
         platforms.push({
-          x: Math.random() * 340,
+          x: nextX,
           y: 600 - i * spacing,
           width: 70,
           height: 10,
           color: "#9333ea"
         });
+        lastX = nextX;
       }
     }
 
@@ -100,8 +104,11 @@
       platforms.forEach(p => {
         p.y -= player.velocityY / 2;
         if (p.y > 600) {
+          let lastX = platforms[platforms.length - 1].x;
+          let newX = lastX + (Math.random() * 80 - 40);
+          newX = Math.max(0, Math.min(newX, 330));
           p.y = 0;
-          p.x = Math.random() * 340;
+          p.x = newX;
           score++;
         }
       });
